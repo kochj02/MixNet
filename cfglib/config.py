@@ -4,6 +4,19 @@ import os
 
 config = EasyDict()
 
+## inference
+config.net = "FSNet_M"
+config.embed = False
+config.onlybackbone = False
+config.scale = 1 
+config.exp_name = "Totaltext_mid"
+config.test_size = (640, 1024) 
+config.dis_threshold = 0.3 
+config.cls_threshold = 0.85 
+config.mid = True
+# config.pos = True
+config.device = "cuda"
+config["device"] = "cuda"
 
 # Normalize image
 config.means = (0.485, 0.456, 0.406)
@@ -16,6 +29,8 @@ config.exp_name = "Synthtext"
 
 # dataloader jobs number
 config.num_workers = 24
+
+config.resume = False
 
 # batch_size
 config.batch_size = 12

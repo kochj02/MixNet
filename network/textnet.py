@@ -208,7 +208,6 @@ class TextNet(nn.Module):
             image = input_dict["img"]
         else:
             # image = input_dict["img"]
-
             image = torch.zeros((b, c, cfg.test_size[1], cfg.test_size[1]), dtype=torch.float32).to(cfg.device)
             image[:, :, :h, :w] = input_dict["img"][:, :, :, :]
 
@@ -233,9 +232,16 @@ class TextNet(nn.Module):
                 # andpart = embed_feature[0][0] * embed_feature[0][1]
 
         if cfg.mid:
-            py_preds, inds, confidences, midline = self.BPN(cnn_feats, input=input_dict, seg_preds=fy_preds, switch="gt")
+            print("Input of self.BPN: cnn...", cnn_feats, "\ninput_dict...", input_dict, "\nfy...", fy_preds)
+            result = self.BPN(cnn_feats, input=input_dict, seg_preds=fy_preds, switch="gt")
+            print("Result of self.BPN:", result)
+            py_preds, inds, confidences, midline = result
         else:
-            py_preds, inds, confidences = self.BPN(cnn_feats, input=input_dict, seg_preds=fy_preds, switch="gt")
+            print("Input of self.BPN: cnn...", cnn_feats, "\ninput_dict...", input_dict, "\nfy...", fy_preds)
+            result = self.BPN(cnn_feats, input=input_dict, seg_preds=fy_preds, switch="gt")
+            print("Result of self.BPN:", result)
+            py_preds, inds, confidences = result
+
         
         output["fy_preds"] = fy_preds
         output["py_preds"] = py_preds

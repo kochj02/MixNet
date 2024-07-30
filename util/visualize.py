@@ -197,7 +197,10 @@ def visualize_detection(image, output_dict, meta=None):
         if cfg.mid:
             for ppt in midline:
                 for pt in ppt:
-                    cv2.circle(im_show, (int(pt[0]), int(pt[1])), 3, (255, 0, 0), -1)
+                    for single_point in pt:
+                        x = single_point[0].item() if torch.is_tensor(single_point[0]) else single_point[0]
+                        y = single_point[1].item() if torch.is_tensor(single_point[1]) else single_point[1]
+                        cv2.circle(im_show, (int(x), int(y)), 3, (255, 0, 0), -1)
 
         path = os.path.join(cfg.vis_dir, '{}_test'.format(cfg.exp_name),
                              meta['image_id'][0].split(".")[0] + "_{}iter.png".format(idx))
@@ -222,7 +225,7 @@ def visualize_detection(image, output_dict, meta=None):
     #                     meta['image_id'][0].split(".")[0] + "init.png")
     # cv2.imwrite(path, im_show_score)
 
-    show_img = np.concatenate(shows, axis=1)
+    show_img = np.concatenate(shows[:1], axis=1)
     show_boundary = cv2.resize(show_img, (320 * len(py_preds), 320))
 
     # fig = plt.figure(figsize=(5, 4))
